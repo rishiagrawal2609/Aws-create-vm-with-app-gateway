@@ -78,8 +78,7 @@ Internet
 
 1. **AWS CLI** configured with appropriate credentials
 2. **Terraform** installed (version >= 1.0)
-3. **SSH Key Pair** - Ensure you have an SSH key pair at `~/.ssh/id_rsa.pub`
-4. **AWS Permissions** - IAM user/role with permissions for:
+3. **AWS Permissions** - IAM user/role with permissions for:
    - VPC, EC2, ELB, IAM, EIP, NAT Gateway
 
 ## 🛠️ Quick Start
@@ -139,10 +138,6 @@ availability_zone_2   = "us-east-1b"
 # Instance specifications
 instance_type = "t2.micro"
 ami_id        = "ami-05ffe3c48a9991133"  # Amazon Linux 2
-
-# SSH access
-key_name        = "deployer-key"
-public_key_path = "~/.ssh/id_rsa.pub"
 ```
 
 ### Load Balancer Configuration
@@ -202,8 +197,8 @@ aws elbv2 describe-target-health --target-group-arn <target-group-arn>
 # Check EC2 instance status
 aws ec2 describe-instances --instance-ids <instance-id>
 
-# SSH to instance (if accessible)
-ssh -i ~/.ssh/id_rsa ec2-user@<private-ip>
+# Use AWS Systems Manager Session Manager (if needed)
+aws ssm start-session --target <instance-id>
 sudo systemctl status httpd
 ```
 
@@ -216,26 +211,27 @@ sudo systemctl status httpd
 
 **Solutions**:
 ```bash
-# Check user data logs
-ssh -i ~/.ssh/id_rsa ec2-user@<private-ip>
+# Check user data logs (via Systems Manager)
+aws ssm start-session --target <instance-id>
 sudo cat /var/log/user-data.log
 sudo cat /var/log/web-setup.log
 
-# Test Apache locally
+# Test Apache locally (via Systems Manager)
 curl http://localhost/
 ```
 
-#### 3. SSH Connection Issues
-**Symptoms**: Cannot SSH to EC2 instance
+#### 3. Instance Access Issues
+**Symptoms**: Cannot access EC2 instance directly
 **Causes**:
-- Instance in private subnet
-- Security group blocking SSH
-- SSH key issues
+- Instance in private subnet (by design)
+- No SSH key configured
+- Security group restrictions
 
 **Solutions**:
-- Use AWS Systems Manager Session Manager
-- Create a bastion host in public subnet
-- Verify security group allows SSH (port 22)
+- Use AWS Systems Manager Session Manager for access
+- Create a bastion host in public subnet if SSH access is needed
+- Monitor through ALB health checks and status pages
+- Use CloudWatch logs for troubleshooting
 
 ### Debugging Commands
 
@@ -294,9 +290,9 @@ aws ec2 delete-vpc --vpc-id <vpc-id>
 - ✅ Security groups with minimal required access
 
 ### Access Control
-- ✅ SSH key-based authentication
 - ✅ Security groups restrict traffic to ALB only
 - ✅ No direct internet access to EC2 instance
+- ✅ Instance access via AWS Systems Manager (if needed)
 
 ### Monitoring
 - ✅ Health checks for automatic failover

@@ -52,17 +52,7 @@ variable "ami_id" {
   default     = "ami-05ffe3c48a9991133"  # Amazon Linux 2 in us-east-1
 }
 
-variable "key_name" {
-  description = "Name of the SSH key pair for EC2 instance access"
-  type        = string
-  default     = "deployer-key"
-}
 
-variable "public_key_path" {
-  description = "Path to the public SSH key file"
-  type        = string
-  default     = "~/.ssh/id_rsa.pub"
-}
 
 variable "enable_nat_gateway" {
   description = "Enable NAT Gateway for private subnet internet access"

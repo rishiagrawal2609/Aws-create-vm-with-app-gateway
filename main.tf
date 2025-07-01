@@ -197,19 +197,12 @@ resource "aws_security_group" "vm" {
   }
 }
 
-# Create key pair for SSH access
-resource "aws_key_pair" "deployer" {
-  key_name   = var.key_name
-  public_key = file(var.public_key_path)  # Make sure this key exists
-}
-
 # Create AWS VM
 resource "aws_instance" "vm" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
   subnet_id              = aws_subnet.private.id
   vpc_security_group_ids = [aws_security_group.vm.id]
-  key_name               = aws_key_pair.deployer.key_name
 
   user_data = <<-EOF
               #!/bin/bash

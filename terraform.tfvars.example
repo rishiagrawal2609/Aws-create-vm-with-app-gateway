@@ -13,9 +13,7 @@ availability_zone_2   = "us-east-1b"
 instance_type = "t2.micro"
 ami_id        = "ami-05ffe3c48a9991133"  # Amazon Linux 2 AMI
 
-# SSH Key Configuration
-key_name        = "deployer-key"
-public_key_path = "~/.ssh/id_rsa.pub"
+
 
 # NAT Gateway Configuration
 enable_nat_gateway = true
