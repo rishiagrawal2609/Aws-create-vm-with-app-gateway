@@ -1,0 +1,35 @@
+# AWS Configuration
+aws_region = "us-east-1"
+
+# VPC Configuration
+vpc_cidr              = "10.0.0.0/16"
+public_subnet_1_cidr  = "10.0.1.0/24"
+public_subnet_2_cidr  = "10.0.2.0/24"
+private_subnet_cidr   = "10.0.3.0/24"
+availability_zone_1   = "us-east-1a"
+availability_zone_2   = "us-east-1b"
+
+# EC2 Configuration
+instance_type = "t2.micro"
+ami_id        = "ami-05ffe3c48a9991133"  # Amazon Linux 2 AMI
+
+# SSH Key Configuration
+key_name        = "deployer-key"
+public_key_path = "~/.ssh/id_rsa.pub"
+
+# NAT Gateway Configuration
+enable_nat_gateway = true
+
+# ALB Configuration
+alb_name           = "app-gateway-alb"
+target_group_name  = "app-gateway-tg"
+health_check_path  = "/"
+health_check_port  = "80"
+
+# Tags
+tags = {
+  Environment = "demo"
+  Project     = "app-gateway"
+  ManagedBy   = "terraform"
+  Owner       = "devops-team"
+} 
